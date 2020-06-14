@@ -73,6 +73,8 @@ public class GUINotificaciones extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTableIndicadores);
 
+        jLabelMensajeTipoAlerta.setForeground(new java.awt.Color(255, 0, 0));
+
         jTableAlertas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -194,6 +196,7 @@ public void fijarTemperatura(float temperatura){
     modeloIndicador.addRow(new Object[] {"Temperatura", temperatura});
 }
 public void fijarMensajeTipoAlerta(String mensaje){
+    
     jLabelMensajeTipoAlerta.setText(mensaje);
 }
 public synchronized void fijarAlerta(ArrayList<ClsAsintomaticoDAO> asintomaticosDAO){
@@ -205,6 +208,7 @@ public synchronized void fijarAlerta(ArrayList<ClsAsintomaticoDAO> asintomaticos
         indice--;
         i++;
     }
+    jLabelUlitmasAlertas.setText("Ultimas "+modeloAlertas.getRowCount()+" alertas");
 }
 public void limpiarIndicadores(){
     for (int i = modeloIndicador.getRowCount() - 1; i >= 0; i--) {

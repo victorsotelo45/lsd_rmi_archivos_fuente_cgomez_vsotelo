@@ -71,6 +71,7 @@ public class ClsNotificacionImpl extends UnicastRemoteObject implements Notifica
         GUI.fijarHoraFecha(hora, fecha);
         //Enviar al GUI el mensaje del tipo de alerta
         String mensaje = objMensajeNotificacion.getMensaje();
+        
         GUI.fijarMensajeTipoAlerta(mensaje);
         //System.out.println("El personal medico debe revisar el paciente");
         AsintomaticoDAOInt objetoAsintomaticoDAO = new ClsAsintomaticoDAOImpl();

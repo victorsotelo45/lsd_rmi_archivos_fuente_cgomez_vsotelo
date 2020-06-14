@@ -1,6 +1,7 @@
 package servidorAlertas;
 
 import clienteHabitacion.utilidades.UtilidadesConsola;
+import java.io.File;
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.rmi.NotBoundException;
@@ -38,6 +39,13 @@ public class ServidorDeObjetos
 			System.err.println("No fue posible Arrancar el NS o Registrar el objeto remoto" + e.getMessage());
 			
 		}
+                
+                String directorioArchivo = "src/servidorAlertas/";
+                File archivo = new File(directorioArchivo+"historialDeAlertas.txt");
+                if(archivo.delete())
+                    System.out.println("El archivo historialDeAlertas.txt ha sido borrado exitosamente!!!");
+                else System.out.println("El archivo historialDeAlertas.txt no se ha podido borrar o no existe!!!");
+                
 	}
 
 }
