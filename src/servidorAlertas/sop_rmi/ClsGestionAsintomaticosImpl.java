@@ -67,18 +67,18 @@ public class ClsGestionAsintomaticosImpl extends UnicastRemoteObject implements 
     public ClsAsintomaticoDTO consultarAsintomatico(int id) throws RemoteException
     {
             System.out.println("Desde consultarAsintomatico()...");
-            AsintomaticoCllbckInt objAsintomaticoCllbck = existeAsintomatico(id);
+            
             ClsAsintomaticoDTO pacienteAsintomatico = null;
-            if(objAsintomaticoCllbck != null)
-            {   
-                pacienteAsintomatico = objAsintomaticoCllbck.getPacienteAsintomatico();
-                
-            }else
+            for(AsintomaticoCllbckInt objAsintomaticoCllbck:asintomaticos)
             {
-               JOptionPane.showMessageDialog(null, "El paciente con id "+id+" no existe!!!"); 
+                if(objAsintomaticoCllbck.getPacienteAsintomatico().getId() == id)
+                {    pacienteAsintomatico = objAsintomaticoCllbck.getPacienteAsintomatico();
+                      break;  
+                }
             }
+
             System.out.println("Saliendo de consultarAsintomatico()...");
-                
+
             return pacienteAsintomatico;
 		
     }
@@ -178,5 +178,4 @@ public class ClsGestionAsintomaticosImpl extends UnicastRemoteObject implements 
         }
         return resultado;
     }
-
 }

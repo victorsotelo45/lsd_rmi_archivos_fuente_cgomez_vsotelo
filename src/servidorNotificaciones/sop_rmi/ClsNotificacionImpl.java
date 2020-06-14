@@ -68,13 +68,15 @@ public class ClsNotificacionImpl extends UnicastRemoteObject implements Notifica
 
         String fecha = objMensajeNotificacion.getFechaAlerta();
         String hora = objMensajeNotificacion.getHoraAlerta();
-        GUI.fijarHoraFecha(hora, fecha);
+        GUI.fijarHoraFecha(fecha, hora);
         //Enviar al GUI el mensaje del tipo de alerta
         String mensaje = objMensajeNotificacion.getMensaje();
         GUI.fijarMensajeTipoAlerta(mensaje);
         //System.out.println("El personal medico debe revisar el paciente");
         AsintomaticoDAOInt objetoAsintomaticoDAO = new ClsAsintomaticoDAOImpl();
         pacientesDAO = objetoAsintomaticoDAO.leerHistorialAsintomatico(pacienteAsintomatico.getId());
+        System.out.println("tamaño del arreglo de pacientes "+pacientesDAO.size());
+        
         int i = 0;
         for(ClsAsintomaticoDAO objPacienteDAO: pacientesDAO)
         {
@@ -82,10 +84,16 @@ public class ClsNotificacionImpl extends UnicastRemoteObject implements Notifica
                 GUI.fijarAlerta(objPacienteDAO.getFechaAlerta(), objPacienteDAO.getHoraAlerta(), objPacienteDAO.getPuntuacion());
                 i++;
             }else
+            {   
+                //GUI.limpiarAlertas();
                 break;
+            }    
             //System.out.println(objPacienteDAO.getFechaAlerta()+"   "+objPacienteDAO.getHoraAlerta()+"          "+objPacienteDAO.getPuntuacion());
         }
-        
+        if(i >= 5)
+        {
+            GUI.limpiarAlertas();
+        }
         System.out.println("Saliendo de notificarRegistro()...");
         
     }

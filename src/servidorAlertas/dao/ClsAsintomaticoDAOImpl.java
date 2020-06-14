@@ -65,6 +65,7 @@ public class ClsAsintomaticoDAOImpl implements AsintomaticoDAOInt{
         FileReader fr = null;
         BufferedReader br = null;
         ArrayList<ClsAsintomaticoDAO> pacientesDAO = new ArrayList<ClsAsintomaticoDAO>();
+        ArrayList<ClsAsintomaticoDAO> pacientesDAO_Ultimas5Alertas = new ArrayList<ClsAsintomaticoDAO>();
         ClsAsintomaticoDAO objPacienteDAO;
         
         directorioArchivo = "src/servidorAlertas/";
@@ -95,7 +96,21 @@ public class ClsAsintomaticoDAOImpl implements AsintomaticoDAOInt{
                     objPacienteDAO = new ClsAsintomaticoDAO(datos_asintomatico[i-2],datos_asintomatico[i-1],datos_asintomatico[i]);
                     pacientesDAO.add(objPacienteDAO);
                 }
-             }      
+             } 
+             
+             int sizeArray = pacientesDAO.size();
+             int li, ls;
+             if(sizeArray <=5){ li = 0;}
+             else {li = sizeArray - 5;}
+            
+             ls = sizeArray-1;
+             for(i = ls; i >= li; i--)
+             {
+                 objPacienteDAO = pacientesDAO.get(i);
+                 pacientesDAO_Ultimas5Alertas.add(objPacienteDAO);
+             }
+             
+             pacientesDAO.clear();
         }
         catch(IOException e){
              e.printStackTrace();
@@ -113,7 +128,7 @@ public class ClsAsintomaticoDAOImpl implements AsintomaticoDAOInt{
              }
          }
         
-        return pacientesDAO;
+        return pacientesDAO_Ultimas5Alertas;
     }
     
 }

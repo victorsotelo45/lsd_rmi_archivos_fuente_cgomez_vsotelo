@@ -485,6 +485,9 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                     jTextAreaConsultas.append("Id: "+pacienteAsintomatico.getId()+"\n");
                     jTextAreaConsultas.append("Direccion: "+pacienteAsintomatico.getDireccion()+"\n");
                     jTextAreaConsultas.append("Datos del paciente asintomatico consultados exitosamente!!!\n");
+                }else
+                {
+                    JOptionPane.showMessageDialog(null, "El paciente con id "+jTextFieldIdConsulta.getText()+" no existe!!!"); 
                 }
                 
             } catch (RemoteException ex) {
@@ -730,7 +733,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                     }
                 }else
                 {
-                    JOptionPane.showMessageDialog(null, "El paciente con id "+jTextFieldIdIndicador.getText()+" no existe!!!");
+                    JOptionPane.showMessageDialog(null, "El paciente con id "+jTextFieldIdIndicador.getText()+" no existe!!!"); 
                 }
 
             } catch (RemoteException e) {

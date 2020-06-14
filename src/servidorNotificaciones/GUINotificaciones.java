@@ -6,7 +6,6 @@
 package servidorNotificaciones;
 
 import javax.swing.table.DefaultTableModel;
-import servidorAlertas.dao.ClsAsintomaticoDAO;
 
 /**
  *
