@@ -12,6 +12,7 @@ import static java.lang.System.exit;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -27,11 +28,12 @@ import servidorAlertas.sop_rmi.GestionAsintomaticosInt;
 public class GUICliente extends javax.swing.JFrame implements Runnable{
 
     private static GestionAsintomaticosInt objetoRemotoServidorAlertas;
+    private ArrayList<Integer> pacientes;
     CardLayout cardLayout;
     /** Creates new form GUICliente */
     public GUICliente() {
         initComponents();
-        
+        pacientes = new ArrayList();
         jButtonConsultar.setEnabled(false);
         jButtonEnviarIndicadores.setEnabled(false);
         
@@ -454,6 +456,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                 asintomatico = new ClsAsintomaticoCllbckImpl(paciente,this);
                 if(objetoRemotoServidorAlertas.registrarAsintomatico(asintomatico) ){
                     JOptionPane.showMessageDialog(null, "Se registro paciente exitosamente!!!");
+                    pacientes.add(Integer.parseInt(jTextFieldId.getText()) );
                     limpiarPanelRegistrar();
                     jButtonConsultar.setEnabled(true);
                     jButtonEnviarIndicadores.setEnabled(true);
@@ -709,7 +712,8 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
         else
         {    try 
              {
-                ClsAsintomaticoDTO pacienteAsintomatico = objetoRemotoServidorAlertas.consultarAsintomatico(Integer.parseInt(jTextFieldIdIndicador.getText()) );
+                int id = Integer.parseInt(jTextFieldIdIndicador.getText() );
+                ClsAsintomaticoDTO pacienteAsintomatico = objetoRemotoServidorAlertas.consultarAsintomatico(id);
                 if(pacienteAsintomatico != null)    
                 {
                     while (true) {
@@ -719,10 +723,12 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                             int fCardiaca = (int) (Math.random() * 31 + 55);
                             int fRespiratoria = (int) (Math.random() * 31 + 65);
                             appendToPane(jTextPaneArea, "\nEnviando indicadores...\n", Color.blue);
+                            appendToPane(jTextPaneArea, "Paciente: "+pacienteAsintomatico.getNombres()+" "+pacienteAsintomatico.getApellidos()+"\n", Color.blue);
+                            appendToPane(jTextPaneArea, pacienteAsintomatico.getTipo_id()+": "+pacienteAsintomatico.getId()+"\n", Color.blue);
                             appendToPane(jTextPaneArea, "Frecuencia cardiaca: " + fCardiaca+"\n", Color.black);
                             appendToPane(jTextPaneArea, "Frecuencia respiratoria: " + fRespiratoria+"\n", Color.black);
                             appendToPane(jTextPaneArea, "Temperatura: " + ToC + " C.\n", Color.black);
-                            objetoRemotoServidorAlertas.enviarIndicadores(Integer.parseInt(jTextFieldIdIndicador.getText()), fCardiaca, fRespiratoria, ToC);
+                            objetoRemotoServidorAlertas.enviarIndicadores(id, fCardiaca, fRespiratoria, ToC);
 
 
                             Thread.sleep(8000);
