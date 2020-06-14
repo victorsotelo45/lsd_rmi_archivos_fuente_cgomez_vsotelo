@@ -687,11 +687,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
             }
         });
         
-        String directorioArchivo = "src/servidorAlertas/";
-        File archivo = new File(directorioArchivo+"historialDeAlertas.txt");
-        if(archivo.delete())
-            System.out.println("El archivo historialDeAlertas.txt ha sido borrado exitosamente!!!");
-        else System.out.println("El archivo historialDeAlertas.txt no se ha podido borrar o no existe!!!");
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
