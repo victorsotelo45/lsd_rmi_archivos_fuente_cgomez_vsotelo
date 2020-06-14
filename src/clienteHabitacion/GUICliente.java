@@ -12,7 +12,7 @@ import static java.lang.System.exit;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -28,12 +28,14 @@ import servidorAlertas.sop_rmi.GestionAsintomaticosInt;
 public class GUICliente extends javax.swing.JFrame implements Runnable{
 
     private static GestionAsintomaticosInt objetoRemotoServidorAlertas;
-    private ArrayList<Integer> pacientes;
+    private HashMap<Integer, ClsAsintomaticoDTO> pacientes;
+    private HashMap<Integer,Boolean> procesos;
     CardLayout cardLayout;
     /** Creates new form GUICliente */
     public GUICliente() {
         initComponents();
-        pacientes = new ArrayList();
+        procesos = new HashMap();
+        pacientes = new HashMap();
         jButtonConsultar.setEnabled(false);
         jButtonEnviarIndicadores.setEnabled(false);
         
@@ -93,6 +95,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
         jButtonEnviar = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTextPaneArea = new javax.swing.JTextPane();
+        jButtonDetener = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -339,7 +342,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
 
         jLabelIdIndicador.setText("Numero de identificacion");
 
-        jButtonEnviar.setText("Enviar");
+        jButtonEnviar.setText("Iniciar Indicadores");
         jButtonEnviar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonEnviarActionPerformed(evt);
@@ -348,33 +351,44 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
 
         jScrollPane3.setViewportView(jTextPaneArea);
 
+        jButtonDetener.setText("Detener indicadores");
+        jButtonDetener.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDetenerActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelIndicadoresLayout = new javax.swing.GroupLayout(jPanelIndicadores);
         jPanelIndicadores.setLayout(jPanelIndicadoresLayout);
         jPanelIndicadoresLayout.setHorizontalGroup(
             jPanelIndicadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelIndicadoresLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
             .addGroup(jPanelIndicadoresLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabelIdIndicador)
                 .addGap(18, 18, 18)
                 .addComponent(jTextFieldIdIndicador, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonEnviar)
+                .addGroup(jPanelIndicadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonDetener)
+                    .addComponent(jButtonEnviar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelIndicadoresLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
         );
         jPanelIndicadoresLayout.setVerticalGroup(
             jPanelIndicadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelIndicadoresLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addContainerGap()
                 .addGroup(jPanelIndicadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldIdIndicador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelIdIndicador)
                     .addComponent(jButtonEnviar))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonDetener)
+                .addGap(3, 3, 3)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -456,7 +470,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                 asintomatico = new ClsAsintomaticoCllbckImpl(paciente,this);
                 if(objetoRemotoServidorAlertas.registrarAsintomatico(asintomatico) ){
                     JOptionPane.showMessageDialog(null, "Se registro paciente exitosamente!!!");
-                    pacientes.add(Integer.parseInt(jTextFieldId.getText()) );
+                    pacientes.put(Integer.parseInt(jTextFieldId.getText()), paciente);
                     limpiarPanelRegistrar();
                     jButtonConsultar.setEnabled(true);
                     jButtonEnviarIndicadores.setEnabled(true);
@@ -628,6 +642,20 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldIdIndicadorActionPerformed
 
+    private void jButtonDetenerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDetenerActionPerformed
+        // TODO add your handling code here:
+        if(jTextFieldIdIndicador.getText() != ""){
+            int id = Integer.parseInt(jTextFieldIdIndicador.getText() );
+            if(procesos.containsKey(id) && procesos.get(id)){
+                procesos.put(id, false);
+            }else{
+                JOptionPane.showMessageDialog(null, "Enviar indicadores del paciente con id "+id+" no se esta ejecutando");
+            }
+        }else
+            JOptionPane.showMessageDialog(null, "Ingrese numero de identificacion");
+        
+    }//GEN-LAST:event_jButtonDetenerActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -670,6 +698,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
     private javax.swing.ButtonGroup buttonGroupTipo;
     private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonConsultar;
+    private javax.swing.JButton jButtonDetener;
     private javax.swing.JButton jButtonEnviar;
     private javax.swing.JButton jButtonEnviarIndicadores;
     private javax.swing.JButton jButtonRegistrar;
@@ -713,33 +742,45 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
         {    try 
              {
                 int id = Integer.parseInt(jTextFieldIdIndicador.getText() );
-                ClsAsintomaticoDTO pacienteAsintomatico = objetoRemotoServidorAlertas.consultarAsintomatico(id);
-                if(pacienteAsintomatico != null)    
-                {
-                    while (true) {
-                        //hacemos un ciclo infinito
-                        try {
-                            float ToC = (float) (Math.random() * 7 + 35);
-                            int fCardiaca = (int) (Math.random() * 31 + 55);
-                            int fRespiratoria = (int) (Math.random() * 31 + 65);
-                            appendToPane(jTextPaneArea, "\nEnviando indicadores...\n", Color.blue);
-                            appendToPane(jTextPaneArea, "Paciente: "+pacienteAsintomatico.getNombres()+" "+pacienteAsintomatico.getApellidos()+"\n", Color.blue);
-                            appendToPane(jTextPaneArea, pacienteAsintomatico.getTipo_id()+": "+pacienteAsintomatico.getId()+"\n", Color.blue);
-                            appendToPane(jTextPaneArea, "Frecuencia cardiaca: " + fCardiaca+"\n", Color.black);
-                            appendToPane(jTextPaneArea, "Frecuencia respiratoria: " + fRespiratoria+"\n", Color.black);
-                            appendToPane(jTextPaneArea, "Temperatura: " + ToC + " C.\n", Color.black);
-                            objetoRemotoServidorAlertas.enviarIndicadores(id, fCardiaca, fRespiratoria, ToC);
+                if(!procesos.containsKey(id))
+                    procesos.put(id, false);
+                if(procesos.get(id)){
+                    JOptionPane.showMessageDialog(null, "ya existe un proceso enviar indicadores para el paciente con id "+id);
+                }else{
+                    ClsAsintomaticoDTO pacienteAsintomatico = objetoRemotoServidorAlertas.consultarAsintomatico(id);
+                    if(pacienteAsintomatico != null)    
+                    {
+                        if(pacientes.containsKey(id)){
+                            procesos.put(id, true);
+                            while (procesos.get(id)) {
+                                //hacemos un ciclo infinito
+                                try {
+                                    float ToC = (float) (Math.random() * 7 + 35);
+                                    int fCardiaca = (int) (Math.random() * 31 + 55);
+                                    int fRespiratoria = (int) (Math.random() * 31 + 65);
+                                    appendToPane(jTextPaneArea, "\nEnviando indicadores...\n", Color.blue);
+                                    appendToPane(jTextPaneArea, "Paciente: "+pacienteAsintomatico.getNombres()+" "+pacienteAsintomatico.getApellidos()+"\n", Color.blue);
+                                    appendToPane(jTextPaneArea, pacienteAsintomatico.getTipo_id()+": "+pacienteAsintomatico.getId()+"\n", Color.blue);
+                                    appendToPane(jTextPaneArea, "Frecuencia cardiaca: " + fCardiaca+"\n", Color.black);
+                                    appendToPane(jTextPaneArea, "Frecuencia respiratoria: " + fRespiratoria+"\n", Color.black);
+                                    appendToPane(jTextPaneArea, "Temperatura: " + ToC + " C.\n", Color.black);
+                                    objetoRemotoServidorAlertas.enviarIndicadores(id, fCardiaca, fRespiratoria, ToC);
 
 
-                            Thread.sleep(8000);
+                                    Thread.sleep(8000);
 
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            appendToPane(jTextPaneArea, "Ha finalizado el proceso enviar indicadores para el paciente "+pacienteAsintomatico.getTipo_id()+": "+pacienteAsintomatico.getId()+" "+pacienteAsintomatico.getNombres()+" "+pacienteAsintomatico.getApellidos()+"\n", Color.GREEN);
+                        }else{
+                            JOptionPane.showMessageDialog(null, "El paciente con id "+id+" no ha sido registrado en este cliente!!!");
                         }
+                    }else
+                    {
+                        JOptionPane.showMessageDialog(null, "El paciente con id "+id+" no existe!!!"); 
                     }
-                }else
-                {
-                    JOptionPane.showMessageDialog(null, "El paciente con id "+jTextFieldIdIndicador.getText()+" no existe!!!"); 
                 }
 
             } catch (RemoteException e) {
@@ -748,7 +789,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
             }
         }
     }
-    
+    //metodo para adicionar texto con color a un jTextPaneArea
     private void appendToPane(JTextPane tp, String msg, Color c)
     {
         StyleContext sc = StyleContext.getDefaultStyleContext();
