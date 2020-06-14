@@ -40,7 +40,7 @@ public class ClsNotificacionImpl extends UnicastRemoteObject implements Notifica
         if(GUIAsintomaticos.containsKey(pacienteAsintomatico.getId())){
             GUI = GUIAsintomaticos.get(pacienteAsintomatico.getId()); 
             GUI.limpiarIndicadores();
-            GUI.limpiarAlertas();
+            //GUI.limpiarAlertas();
         }else{
             GUI = new GUINotificaciones();
             GUIAsintomaticos.put(pacienteAsintomatico.getId(), GUI);
@@ -68,32 +68,15 @@ public class ClsNotificacionImpl extends UnicastRemoteObject implements Notifica
 
         String fecha = objMensajeNotificacion.getFechaAlerta();
         String hora = objMensajeNotificacion.getHoraAlerta();
-        GUI.fijarHoraFecha(fecha, hora);
+        GUI.fijarHoraFecha(hora, fecha);
         //Enviar al GUI el mensaje del tipo de alerta
         String mensaje = objMensajeNotificacion.getMensaje();
         GUI.fijarMensajeTipoAlerta(mensaje);
         //System.out.println("El personal medico debe revisar el paciente");
         AsintomaticoDAOInt objetoAsintomaticoDAO = new ClsAsintomaticoDAOImpl();
         pacientesDAO = objetoAsintomaticoDAO.leerHistorialAsintomatico(pacienteAsintomatico.getId());
-        System.out.println("tamaño del arreglo de pacientes "+pacientesDAO.size());
+        GUI.fijarAlerta(pacientesDAO);
         
-        int i = 0;
-        for(ClsAsintomaticoDAO objPacienteDAO: pacientesDAO)
-        {
-            if(i<5){
-                GUI.fijarAlerta(objPacienteDAO.getFechaAlerta(), objPacienteDAO.getHoraAlerta(), objPacienteDAO.getPuntuacion());
-                i++;
-            }else
-            {   
-                //GUI.limpiarAlertas();
-                break;
-            }    
-            //System.out.println(objPacienteDAO.getFechaAlerta()+"   "+objPacienteDAO.getHoraAlerta()+"          "+objPacienteDAO.getPuntuacion());
-        }
-        if(i >= 5)
-        {
-            GUI.limpiarAlertas();
-        }
         System.out.println("Saliendo de notificarRegistro()...");
         
     }

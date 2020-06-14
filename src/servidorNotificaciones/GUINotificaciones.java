@@ -5,7 +5,9 @@
  */
 package servidorNotificaciones;
 
+import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
+import servidorAlertas.dao.ClsAsintomaticoDAO;
 
 /**
  *
@@ -194,18 +196,25 @@ public void fijarTemperatura(float temperatura){
 public void fijarMensajeTipoAlerta(String mensaje){
     jLabelMensajeTipoAlerta.setText(mensaje);
 }
-public void fijarAlerta(String fecha, String hora, String puntuacion){
-    modeloAlertas.addRow(new Object[] {fecha, hora, puntuacion});
+public synchronized void fijarAlerta(ArrayList<ClsAsintomaticoDAO> asintomaticosDAO){
+    limpiarAlertas();
+    int indice = asintomaticosDAO.size() - 1;
+    int i = 0;
+    while(indice >= 0 && i < 5){
+        modeloAlertas.addRow(new Object[] {asintomaticosDAO.get(i).getFechaAlerta(),asintomaticosDAO.get(i).getHoraAlerta(),asintomaticosDAO.get(i).getPuntuacion()});
+        indice--;
+        i++;
+    }
 }
 public void limpiarIndicadores(){
-    for (int i = 0; i <= modeloIndicador.getRowCount(); i++) {
-        modeloIndicador.removeRow(0);
+    for (int i = modeloIndicador.getRowCount() - 1; i >= 0; i--) {
+        modeloIndicador.removeRow(i);
     }   
 }
 public void limpiarAlertas(){
-    for (int i = 0; i <= modeloAlertas.getRowCount(); i++) {
-        modeloAlertas.removeRow(0);
-    }   
+    for (int i = modeloAlertas.getRowCount() - 1; i >= 0; i--) {
+        modeloAlertas.removeRow(i);
+    }  
 }
 
     public void fijarHoraFecha(String fecha, String hora) {
