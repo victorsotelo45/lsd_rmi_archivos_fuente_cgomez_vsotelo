@@ -14,7 +14,7 @@ import servidorNotificaciones.dto.ClsMensajeNotificacionDTO;
 
 
 public class ClsNotificacionImpl extends UnicastRemoteObject implements NotificacionInt{
-    HashMap<ClsAsintomaticoDTO, GUINotificaciones> GUIAsintomaticos;
+    HashMap<Integer, GUINotificaciones> GUIAsintomaticos;
 
     public ClsNotificacionImpl() throws RemoteException{
         GUIAsintomaticos = new HashMap();
@@ -37,11 +37,17 @@ public class ClsNotificacionImpl extends UnicastRemoteObject implements Notifica
         System.out.println("Direccion: "+pacienteAsintomatico.getDireccion());*/
         //Para cada paciente se crea un GUI
         GUINotificaciones GUI;
-        if(!GUIAsintomaticos.containsKey(pacienteAsintomatico)){
+        if(GUIAsintomaticos.containsKey(pacienteAsintomatico.getId())){
+            GUI = GUIAsintomaticos.get(pacienteAsintomatico.getId()); 
+            GUI.limpiarIndicadores();
+            GUI.limpiarAlertas();
+        }else{
             GUI = new GUINotificaciones();
-            GUIAsintomaticos.put(pacienteAsintomatico, GUI);
-        }else
-            GUI = GUIAsintomaticos.get(pacienteAsintomatico);
+            GUIAsintomaticos.put(pacienteAsintomatico.getId(), GUI);
+        }
+            
+        if(!GUI.isVisible())
+            GUI.setVisible(true);
         //Enviar al GUI los datos del paciente
         GUI.fijarAsintomatico(pacienteAsintomatico.getTipo_id(),pacienteAsintomatico.getId(),pacienteAsintomatico.getNombres(),
         pacienteAsintomatico.getApellidos(), pacienteAsintomatico.getDireccion());
@@ -64,10 +70,13 @@ public class ClsNotificacionImpl extends UnicastRemoteObject implements Notifica
         //System.out.println("El personal medico debe revisar el paciente");
         AsintomaticoDAOInt objetoAsintomaticoDAO = new ClsAsintomaticoDAOImpl();
         pacientesDAO = objetoAsintomaticoDAO.leerHistorialAsintomatico(pacienteAsintomatico.getId());
-        
+        int i = 0;
         for(ClsAsintomaticoDAO objPacienteDAO: pacientesDAO)
         {
-            GUI.fijarAlerta(objPacienteDAO.getFechaAlerta(), objPacienteDAO.getHoraAlerta(), objPacienteDAO.getPuntuacion());
+            if(i<5)
+                GUI.fijarAlerta(objPacienteDAO.getFechaAlerta(), objPacienteDAO.getHoraAlerta(), objPacienteDAO.getPuntuacion());
+            else
+                break;
             //System.out.println(objPacienteDAO.getFechaAlerta()+"   "+objPacienteDAO.getHoraAlerta()+"          "+objPacienteDAO.getPuntuacion());
         }
         
