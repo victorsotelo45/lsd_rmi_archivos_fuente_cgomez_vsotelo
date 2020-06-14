@@ -146,7 +146,7 @@ public class ClsGestionAsintomaticosImpl extends UnicastRemoteObject implements 
                 if(puntuacionFrecCardiaca == 0) frecuenciaCardiaca = 0;
                 if(puntuacionFrecRespiratoria == 0) frecuenciaRespiratoria = 0;
                 if(puntuacionTemperatura == 0) temperatura = 0;
-                objMensajeNotificacion = new ClsMensajeNotificacionDTO(pacienteAsintomatico, frecuenciaCardiaca, frecuenciaRespiratoria, temperatura);
+                objMensajeNotificacion = new ClsMensajeNotificacionDTO(pacienteAsintomatico, frecuenciaCardiaca, frecuenciaRespiratoria, temperatura, fechaAlerta, horaAlerta, mensaje);
                 objetoRemotoServidorNotificaciones.notificarRegistro(objMensajeNotificacion);
             }
             
@@ -155,7 +155,7 @@ public class ClsGestionAsintomaticosImpl extends UnicastRemoteObject implements 
                 objetoAsintomaticoDAO.escribirHistorialAsintomatico(pacienteAsintomatico, fechaAlerta, horaAlerta, puntuacionIndicadores);
                 mensaje = "Alerta, el personal médico debe remitir el paciente "+nombres+" "+apellidos+" identificado con ["+tipo_id+"]["+id+"] al hospital!!!";
                 objAsintomaticoCllbck.notificarMensajeCllbck(mensaje);
-                objMensajeNotificacion = new ClsMensajeNotificacionDTO(pacienteAsintomatico, frecuenciaCardiaca, frecuenciaRespiratoria, temperatura);
+                objMensajeNotificacion = new ClsMensajeNotificacionDTO(pacienteAsintomatico, frecuenciaCardiaca, frecuenciaRespiratoria, temperatura, fechaAlerta, horaAlerta, mensaje);
                 objetoRemotoServidorNotificaciones.notificarRegistro(objMensajeNotificacion);
             }
                
