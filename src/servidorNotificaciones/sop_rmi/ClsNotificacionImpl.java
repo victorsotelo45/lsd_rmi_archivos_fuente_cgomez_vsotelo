@@ -64,18 +64,23 @@ public class ClsNotificacionImpl extends UnicastRemoteObject implements Notifica
             GUI.fijarFrecuenciaRespiratoria(frecuenciaRespiratoria);
         if(temperatura != 0)
             //System.out.println("Temperatura: "+temperatura);
-            GUI.fijarTemperatura(temperatura);
+        GUI.fijarTemperatura(temperatura);
+        String fecha = "XXX";
+        String hora = "XXX";
+        GUI.fijarHoraFecha(hora, fecha);
         //Enviar al GUI el mensaje del tipo de alerta
         String mensaje = ("El personal medico debe revisar al paciente");
+        GUI.fijarMensajeTipoAlerta(mensaje);
         //System.out.println("El personal medico debe revisar el paciente");
         AsintomaticoDAOInt objetoAsintomaticoDAO = new ClsAsintomaticoDAOImpl();
         pacientesDAO = objetoAsintomaticoDAO.leerHistorialAsintomatico(pacienteAsintomatico.getId());
         int i = 0;
         for(ClsAsintomaticoDAO objPacienteDAO: pacientesDAO)
         {
-            if(i<5)
+            if(i<5){
                 GUI.fijarAlerta(objPacienteDAO.getFechaAlerta(), objPacienteDAO.getHoraAlerta(), objPacienteDAO.getPuntuacion());
-            else
+                i++;
+            }else
                 break;
             //System.out.println(objPacienteDAO.getFechaAlerta()+"   "+objPacienteDAO.getHoraAlerta()+"          "+objPacienteDAO.getPuntuacion());
         }

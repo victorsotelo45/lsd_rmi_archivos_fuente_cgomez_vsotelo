@@ -6,6 +6,7 @@
 package servidorNotificaciones;
 
 import javax.swing.table.DefaultTableModel;
+import servidorAlertas.dao.ClsAsintomaticoDAO;
 
 /**
  *
@@ -207,4 +208,9 @@ public void limpiarAlertas(){
         modeloAlertas.removeRow(0);
     }   
 }
+
+    public void fijarHoraFecha(String fecha, String hora) {
+        jLabelHora.setText(hora);
+        jLabelFecha.setText(fecha);
+    }
 }
