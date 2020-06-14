@@ -86,7 +86,7 @@ public class ClsAsintomaticoDAOImpl implements AsintomaticoDAOInt{
              int i;
              String[] datos_asintomatico = null; 
              String linea;
-             System.out.println("Fecha_Alerta Hora_de_Alerta Puntuacion");
+             //System.out.println("Fecha_Alerta Hora_de_Alerta Puntuacion");
              while((linea=br.readLine())!=null)
              {   datos_asintomatico = linea.split(" ");
                  i = datos_asintomatico.length - 1;

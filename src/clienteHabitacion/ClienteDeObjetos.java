@@ -18,7 +18,7 @@ public class ClienteDeObjetos
                 
         public static void MenuPrincipal() throws RemoteException
         {
-            String nombres, apellidos, tipo_id, direccion, directorioArchivo;
+            String nombres, apellidos, tipo_id, direccion;
             int opcion, id, frecuenciaCardiaca, frecuenciaRespiratoria;
             float temperatura;
             boolean registroAsintomaticoCllbck, notificoIndicador;
@@ -130,7 +130,7 @@ public class ClienteDeObjetos
                 directorioArchivo = "src/servidorAlertas/";
                 File archivo = new File(directorioArchivo+"historialDeAlertas.txt");
                 if(archivo.delete())
-                   System.out.println("El archivo historialDeAlertas.txt ha sido borrado satisfactoriamente!!!");
+                   System.out.println("El archivo historialDeAlertas.txt ha sido borrado exitosamente!!!");
                 else System.out.println("El archivo historialDeAlertas.txt no se ha podido borrar o no existe!!!");
                 
                 MenuPrincipal();

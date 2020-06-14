@@ -31,8 +31,8 @@ public class ClsAsintomaticoCllbckImpl extends UnicastRemoteObject implements As
         
     @Override
     public ClsAsintomaticoDTO getPacienteAsintomatico() throws RemoteException {
-        //System.out.println("Desde getPacienteAsintomatico()...");
-        //System.out.println("Saliendo de getPacienteAsintomatico()...");
+        System.out.println("Desde getPacienteAsintomatico()...");
+        System.out.println("Saliendo de getPacienteAsintomatico()...");
         return this.pacienteAsintomatico;
     }
     

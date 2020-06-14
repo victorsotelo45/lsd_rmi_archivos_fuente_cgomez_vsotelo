@@ -562,10 +562,10 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
     private void jTextFieldDireccionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldDireccionKeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
-        if((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c != KeyEvent.VK_BACK_SPACE) && (c != ' ') && (c !='ñ')&& (c !='Ñ'))
+        if((c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && (c < '0' || c > '9') && (c != KeyEvent.VK_BACK_SPACE) && (c != ' ') && (c !='ñ')&& (c !='Ñ') && (c !='#') && (c !='-') && (c !='.') && (c !='/' ))
         {   evt.consume();
             getToolkit().beep();
-            JOptionPane.showMessageDialog(null,"Ingrese solo letras!!!");
+            JOptionPane.showMessageDialog(null,"Caracter incorrecto para la direccion!!!");
         }
         
         if(jTextFieldDireccion.getText().length() >= 30)
@@ -656,7 +656,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
         String directorioArchivo = "src/servidorAlertas/";
         File archivo = new File(directorioArchivo+"historialDeAlertas.txt");
         if(archivo.delete())
-            System.out.println("El archivo historialDeAlertas.txt ha sido borrado satisfactoriamente!!!");
+            System.out.println("El archivo historialDeAlertas.txt ha sido borrado exitosamente!!!");
         else System.out.println("El archivo historialDeAlertas.txt no se ha podido borrar o no existe!!!");
     }
 
@@ -718,7 +718,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                             appendToPane(jTextPaneArea, "\nEnviando indicadores...\n", Color.blue);
                             appendToPane(jTextPaneArea, "Frecuencia cardiaca: " + fCardiaca+"\n", Color.black);
                             appendToPane(jTextPaneArea, "Frecuencia respiratoria: " + fRespiratoria+"\n", Color.black);
-                            appendToPane(jTextPaneArea, "Temperatura " + ToC + " C.\n", Color.black);
+                            appendToPane(jTextPaneArea, "Temperatura: " + ToC + " C.\n", Color.black);
                             objetoRemotoServidorAlertas.enviarIndicadores(Integer.parseInt(jTextFieldIdIndicador.getText()), fCardiaca, fRespiratoria, ToC);
 
 
@@ -728,6 +728,9 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                             e.printStackTrace();
                         }
                     }
+                }else
+                {
+                    JOptionPane.showMessageDialog(null, "El paciente con id "+jTextFieldIdIndicador.getText()+" no existe!!!");
                 }
 
             } catch (RemoteException e) {
