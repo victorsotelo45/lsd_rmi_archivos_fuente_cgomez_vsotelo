@@ -11,6 +11,7 @@ import servidorAlertas.dao.ClsAsintomaticoDAO;
 import servidorAlertas.dto.ClsAsintomaticoDTO;
 import servidorNotificaciones.GUINotificaciones;
 import servidorNotificaciones.dto.ClsMensajeNotificacionDTO;
+import java.applet.AudioClip;
 
 
 public class ClsNotificacionImpl extends UnicastRemoteObject implements NotificacionInt{
@@ -73,6 +74,9 @@ public class ClsNotificacionImpl extends UnicastRemoteObject implements Notifica
         String mensaje = objMensajeNotificacion.getMensaje();
         
         GUI.fijarMensajeTipoAlerta(mensaje);
+        AudioClip sonido;
+        sonido = java.applet.Applet.newAudioClip(getClass().getResource("/sonidos/alerta.wav"));
+        sonido.play();
         //System.out.println("El personal medico debe revisar el paciente");
         AsintomaticoDAOInt objetoAsintomaticoDAO = new ClsAsintomaticoDAOImpl();
         pacientesDAO = objetoAsintomaticoDAO.leerHistorialAsintomatico(pacienteAsintomatico.getId());

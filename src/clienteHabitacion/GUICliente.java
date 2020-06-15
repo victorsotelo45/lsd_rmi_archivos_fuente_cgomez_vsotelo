@@ -6,8 +6,9 @@ import clienteHabitacion.utilidades.UtilidadesConsola;
 import clienteHabitacion.utilidades.UtilidadesRegistroC;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import static java.lang.System.exit;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
@@ -15,7 +16,10 @@ import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.SimpleAttributeSet;
@@ -30,10 +34,16 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
     private static GestionAsintomaticosInt objetoRemotoServidorAlertas;
     private HashMap<Integer, ClsAsintomaticoDTO> pacientes;
     private HashMap<Integer,Boolean> procesos;
+    FondoPanel fondo = new FondoPanel();
     CardLayout cardLayout;
     /** Creates new form GUICliente */
     public GUICliente() {
-        initComponents();
+        this.setContentPane(fondo);
+        initComponents();   
+        ImageIcon imagenDoctor = new ImageIcon(getClass().getResource("/imagenes/doctor.png"));
+        Icon fondoDoctor = new ImageIcon(imagenDoctor.getImage().getScaledInstance(jLabelImagen.getWidth(), jLabelImagen.getHeight(), Image.SCALE_DEFAULT));
+        jLabelImagen.setIcon(fondoDoctor);
+        this.repaint();
         procesos = new HashMap();
         pacientes = new HashMap();
         jButtonConsultar.setEnabled(false);
@@ -63,12 +73,11 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
     private void initComponents() {
 
         buttonGroupTipo = new javax.swing.ButtonGroup();
-        jPanelMenu = new javax.swing.JPanel();
         jButtonRegistrar = new javax.swing.JButton();
         jButtonConsultar = new javax.swing.JButton();
         jButtonEnviarIndicadores = new javax.swing.JButton();
         jPanelCardLayout = new javax.swing.JPanel();
-        jPanelRegistrar = new javax.swing.JPanel();
+        jPanelRegistrar = new FondoPanelConsulta();
         jLabelTipoId = new javax.swing.JLabel();
         jLabelId = new javax.swing.JLabel();
         jLabelNombre = new javax.swing.JLabel();
@@ -83,13 +92,14 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
         jTextFieldApellidos = new javax.swing.JTextField();
         jTextFieldDireccion = new javax.swing.JTextField();
         jTextFieldId = new javax.swing.JTextField();
-        jPanelConsultar = new javax.swing.JPanel();
+        jLabelImagen = new javax.swing.JLabel();
+        jPanelConsultar = new FondoPanelConsulta();
         jTextFieldIdConsulta = new javax.swing.JTextField();
         jLabelIdConsulta = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextAreaConsultas = new javax.swing.JTextArea();
         jButtonBuscar = new javax.swing.JButton();
-        jPanelIndicadores = new javax.swing.JPanel();
+        jPanelIndicadores = new FondoPanelIndicadores();
         jTextFieldIdIndicador = new javax.swing.JTextField();
         jLabelIdIndicador = new javax.swing.JLabel();
         jButtonEnviar = new javax.swing.JButton();
@@ -120,40 +130,19 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
             }
         });
 
-        javax.swing.GroupLayout jPanelMenuLayout = new javax.swing.GroupLayout(jPanelMenu);
-        jPanelMenu.setLayout(jPanelMenuLayout);
-        jPanelMenuLayout.setHorizontalGroup(
-            jPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelMenuLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButtonConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButtonEnviarIndicadores, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButtonRegistrar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(94, 94, 94))
-        );
-        jPanelMenuLayout.setVerticalGroup(
-            jPanelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelMenuLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(jButtonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonEnviarIndicadores, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         jPanelCardLayout.setLayout(new java.awt.CardLayout());
 
         jPanelRegistrar.setName(""); // NOI18N
+        jPanelRegistrar.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelTipoId.setText("Tipo de identificacion");
+        jPanelRegistrar.add(jLabelTipoId, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, -1, -1));
 
         jLabelId.setText("Numero de identificacion");
+        jPanelRegistrar.add(jLabelId, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 80, -1, -1));
 
         jLabelNombre.setText("Nombre");
+        jPanelRegistrar.add(jLabelNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 118, -1, -1));
 
         jButtonRegistrarPaciente.setText("Registrar");
         jButtonRegistrarPaciente.addActionListener(new java.awt.event.ActionListener() {
@@ -161,6 +150,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                 jButtonRegistrarPacienteActionPerformed(evt);
             }
         });
+        jPanelRegistrar.add(jButtonRegistrarPaciente, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, -1, -1));
 
         jButtonSalir.setText("Salir");
         jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -168,108 +158,54 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                 jButtonSalirActionPerformed(evt);
             }
         });
+        jPanelRegistrar.add(jButtonSalir, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 300, -1, -1));
 
         buttonGroupTipo.add(jRadioButtonCC);
         jRadioButtonCC.setText("CC");
+        jPanelRegistrar.add(jRadioButtonCC, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 40, -1, -1));
 
         buttonGroupTipo.add(jRadioButtonTI);
         jRadioButtonTI.setText("TI");
+        jPanelRegistrar.add(jRadioButtonTI, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 40, -1, -1));
 
         buttonGroupTipo.add(jRadioButtonPP);
         jRadioButtonPP.setText("PP");
+        jPanelRegistrar.add(jRadioButtonPP, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, -1, -1));
 
         jLabelApellido.setText("Apellido");
+        jPanelRegistrar.add(jLabelApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 156, -1, -1));
 
         jLabelDireccion.setText("Direccion de domicilio");
+        jPanelRegistrar.add(jLabelDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 194, -1, -1));
 
         jTextFieldNombres.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextFieldNombresKeyTyped(evt);
             }
         });
+        jPanelRegistrar.add(jTextFieldNombres, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 120, 198, -1));
 
         jTextFieldApellidos.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextFieldApellidosKeyTyped(evt);
             }
         });
+        jPanelRegistrar.add(jTextFieldApellidos, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 150, 198, -1));
 
         jTextFieldDireccion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextFieldDireccionKeyTyped(evt);
             }
         });
+        jPanelRegistrar.add(jTextFieldDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 190, 198, -1));
 
         jTextFieldId.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTextFieldIdKeyTyped(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanelRegistrarLayout = new javax.swing.GroupLayout(jPanelRegistrar);
-        jPanelRegistrar.setLayout(jPanelRegistrarLayout);
-        jPanelRegistrarLayout.setHorizontalGroup(
-            jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelRegistrarLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabelId)
-                        .addComponent(jLabelTipoId)
-                        .addComponent(jLabelDireccion, javax.swing.GroupLayout.Alignment.LEADING))
-                    .addComponent(jLabelApellido)
-                    .addComponent(jLabelNombre))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanelRegistrarLayout.createSequentialGroup()
-                        .addComponent(jRadioButtonCC)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButtonTI)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRadioButtonPP))
-                    .addComponent(jTextFieldNombres)
-                    .addComponent(jTextFieldApellidos)
-                    .addComponent(jTextFieldDireccion)
-                    .addComponent(jTextFieldId, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanelRegistrarLayout.createSequentialGroup()
-                .addGap(72, 72, 72)
-                .addComponent(jButtonRegistrarPaciente)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonSalir)
-                .addGap(77, 77, 77))
-        );
-        jPanelRegistrarLayout.setVerticalGroup(
-            jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelRegistrarLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelTipoId)
-                    .addComponent(jRadioButtonCC)
-                    .addComponent(jRadioButtonTI)
-                    .addComponent(jRadioButtonPP))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelId)
-                    .addComponent(jTextFieldId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelNombre)
-                    .addComponent(jTextFieldNombres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelApellido)
-                    .addComponent(jTextFieldApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelDireccion)
-                    .addComponent(jTextFieldDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
-                .addGroup(jPanelRegistrarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonRegistrarPaciente)
-                    .addComponent(jButtonSalir))
-                .addGap(25, 25, 25))
-        );
+        jPanelRegistrar.add(jTextFieldId, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 80, 198, -1));
+        jPanelRegistrar.add(jLabelImagen, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, 150, 220));
 
         jPanelCardLayout.add(jPanelRegistrar, "cardRegistrar");
 
@@ -311,7 +247,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                         .addComponent(jTextFieldIdConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonBuscar)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 133, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanelConsultarLayout.setVerticalGroup(
@@ -323,7 +259,7 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                     .addComponent(jTextFieldIdConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonBuscar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -362,20 +298,21 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
         jPanelIndicadores.setLayout(jPanelIndicadoresLayout);
         jPanelIndicadoresLayout.setHorizontalGroup(
             jPanelIndicadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelIndicadoresLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(jPanelIndicadoresLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelIdIndicador)
-                .addGap(18, 18, 18)
-                .addComponent(jTextFieldIdIndicador, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelIndicadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonDetener)
-                    .addComponent(jButtonEnviar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanelIndicadoresLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabelIdIndicador)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextFieldIdIndicador, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonEnviar))
+                    .addGroup(jPanelIndicadoresLayout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(jPanelIndicadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButtonDetener)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 464, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(60, Short.MAX_VALUE))
         );
         jPanelIndicadoresLayout.setVerticalGroup(
             jPanelIndicadoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -387,9 +324,9 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
                     .addComponent(jButtonEnviar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonDetener)
-                .addGap(3, 3, 3)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         jPanelCardLayout.add(jPanelIndicadores, "cardIndicadores");
@@ -400,25 +337,32 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanelMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(526, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonEnviarIndicadores, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(620, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addGap(169, 169, 169)
-                    .addComponent(jPanelCardLayout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanelCardLayout, javax.swing.GroupLayout.PREFERRED_SIZE, 543, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(50, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jPanelMenu, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(106, 106, 106))
+                .addGap(43, 43, 43)
+                .addComponent(jButtonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
+                .addComponent(jButtonConsultar, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonEnviarIndicadores, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(180, Short.MAX_VALUE))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jPanelCardLayout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addContainerGap(53, Short.MAX_VALUE)))
         );
 
         pack();
@@ -705,12 +649,12 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
     private javax.swing.JLabel jLabelId;
     private javax.swing.JLabel jLabelIdConsulta;
     private javax.swing.JLabel jLabelIdIndicador;
+    private javax.swing.JLabel jLabelImagen;
     private javax.swing.JLabel jLabelNombre;
     private javax.swing.JLabel jLabelTipoId;
     private javax.swing.JPanel jPanelCardLayout;
     private javax.swing.JPanel jPanelConsultar;
     private javax.swing.JPanel jPanelIndicadores;
-    private javax.swing.JPanel jPanelMenu;
     private javax.swing.JPanel jPanelRegistrar;
     private javax.swing.JRadioButton jRadioButtonCC;
     private javax.swing.JRadioButton jRadioButtonPP;
@@ -802,5 +746,37 @@ public class GUICliente extends javax.swing.JFrame implements Runnable{
 
     }
 
-
+    class FondoPanel extends JPanel{
+        private Image imagenFondo;
+        @Override
+        public void paint(Graphics g){
+            imagenFondo = new ImageIcon(getClass().getResource("/imagenes/coronavirus-hospital-sant-joan-deu-barcelona.jpg")).getImage();
+            g.drawImage(imagenFondo, 0, 0, getWidth(),getHeight(),this);
+            setOpaque(false);
+            super.paint(g);
+        }
+    }
+    
+    class FondoPanelConsulta extends JPanel{
+        private Image imagenFondo;
+        @Override
+        public void paint(Graphics g){
+            imagenFondo = new ImageIcon(getClass().getResource("/imagenes/frecuencia.jpg")).getImage();
+            g.drawImage(imagenFondo, 0, 0, getWidth(),getHeight(),this);
+            setOpaque(false);
+            super.paint(g);
+        }
+    }
+        
+    class FondoPanelIndicadores extends JPanel{
+        private Image imagenFondo;
+        @Override
+        public void paint(Graphics g){
+            imagenFondo = new ImageIcon(getClass().getResource("/imagenes/frecuencia.jpg")).getImage();
+            g.drawImage(imagenFondo, 0, 0, getWidth(),getHeight(),this);
+            setOpaque(false);
+            super.paint(g);
+        }
+    }
+    
 }
